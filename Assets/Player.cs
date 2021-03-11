@@ -10,6 +10,7 @@ using System;
 public class Player : MonoBehaviour
 {
 public Joystick joystick;
+public Button volumeBtn;
 public Button jmpBtn;
 public Button pauseBtn;
 float moveV;
@@ -22,10 +23,7 @@ Vector3 rot;
 public GameObject win;
 public GameObject lose;
 public GameObject[] dogs;
-public GameObject bone;
-public GameObject plane;
 public int jumpforce;
-string str="Count bones";
 public float speed = 5f;
 public Text timeText;
 public Animator anim;
@@ -40,7 +38,18 @@ Rigidbody rb;
 public string flag="";
 Vector3 m_EulerAngleVelocity = new Vector3(0, 100, 0);
 Vector3 m_EulerAngleVelocity2 = new Vector3(0, -100, 0);
+public List<AudioClip> clips;
+AudioSource audio;
+AudioSource TimerAudio;
+AudioSource MainAudio;
+
     // Start is called before the first frame update
+void Awake(){
+audio=GetComponents<AudioSource>()[0];
+MainAudio=GetComponents<AudioSource>()[1];
+TimerAudio=GetComponents<AudioSource>()[2];
+}
+
     void Start()
     {
 
@@ -99,6 +108,9 @@ transform.Translate (Vector3.forward * moveV * speed * Time.deltaTime);
 if(!yetJump && moveV!=0){
 anim.Play("run");
 }
+/*else if(rb.velocity==Vector3.zero){
+anim.Play("idle");
+}*/
 
 /*rot=new Vector3(0,moveH * 100,0);
 Quaternion deltaRotation = Quaternion.Euler(rot * Time.deltaTime);
@@ -114,10 +126,18 @@ transform.Rotate(0,moveH,0,Space.World);
 
 
 	if(Mathf.Ceil(Time.timeSinceLevelLoad) <= time){
-		
+		if(Mathf.Ceil(Time.timeSinceLevelLoad) >= time - 10f){
+			timeText.color = new Color32(255, 0, 0, 255);
+			if(!TimerAudio.isPlaying && !isPause) 
+			TimerAudio.Play();
+		}
 		string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
 		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad);
-	}else if(Time.timeScale<=0){
+
+	}else if(/*int.Parse(timeText.text)<=0 *//*Time.timeScale<=0*/!isPause){
+		MainAudio.Stop();
+		audio.clip = clips[3];
+		audio.Play();
 		Pause(lose);
 		pauseBtn.gameObject.SetActive(false);
 }
@@ -136,6 +156,9 @@ transform.Rotate(0,moveH,0,Space.World);
 	}
 	transform.Translate(Vector3.forward * Time.deltaTime * -speed);
 }
+	/*else if(rb.velocity==Vector3.zero){
+anim.Play("idle");
+}*/
 	 if (Input.GetKeyDown(KeyCode.Space) && !yetJump)
          {
 	SpaceJump();
@@ -153,6 +176,8 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 	
     }
 	void Jumping(){
+		audio.clip = clips[0];
+		audio.Play();
 		anim.Play("jump");
 		yetJump = true;
 	}
@@ -162,9 +187,13 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 		if(other.gameObject.tag == "Bone"){
 			
 			count++;
-			
-       			txt.text = Convert.ToString (str + count +"/"+maxCount);
+			audio.clip = clips[1];
+			audio.Play();
+       			txt.text = Convert.ToString (count +"/"+maxCount);
 			if(count==maxCount){
+				audio.clip = clips[2];
+				audio.Play();
+				MainAudio.Stop();
 				Pause(win);
 				pauseBtn.gameObject.SetActive(false);
 				if(lvl>=2){
@@ -187,9 +216,22 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 	}
 
 public void Pause(GameObject show){
+audio.loop=!isPause;
+timeText.transform.parent.gameObject.SetActive(isPause);
+txt.transform.parent.gameObject.SetActive(isPause);
+//volumeBtn.gameObject.SetActive(!isPause);
 windowTxt.gameObject.SetActive(!isPause);
 show.SetActive(!isPause);
-timeText.gameObject.SetActive(isPause);
+Time.timeScale=isPause?1:0;
+joystick.gameObject.SetActive(isPause);
+jmpBtn.gameObject.SetActive(isPause);
+isPause=!isPause;
+}
+
+public void PauseClick(GameObject show){
+volumeBtn.gameObject.SetActive(!isPause);
+windowTxt.gameObject.SetActive(!isPause);
+show.SetActive(!isPause);
 Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);

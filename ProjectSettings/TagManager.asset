@@ -6,6 +6,13 @@ TagManager:
   tags:
   - Bone
   - Platform
+  - 1dog
+  - 2dog
+  - 3dog
+  - 4dog
+  - 5dog
+  - 6dog
+  - 7dog
   layers:
   - Default
   - TransparentFX

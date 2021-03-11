@@ -21,6 +21,10 @@ public void LoadLvl(){
 SceneManager.LoadScene("Main" + PlayerPrefs.GetInt("lvl"));
 }
 
+public void SwitchSound(){
+Camera.main.gameObject.GetComponent<AudioListener>().enabled = !Camera.main.gameObject.GetComponent<AudioListener>().enabled;
+}
+
 public void Restart(){
 SceneManager.LoadScene(SceneManager.GetActiveScene().name.ToString());
 }

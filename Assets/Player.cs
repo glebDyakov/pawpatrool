@@ -22,6 +22,7 @@ public float time=180f;
 Vector3 rot;
 public GameObject win;
 public GameObject lose;
+public GameObject sale;
 public GameObject[] dogs;
 public int jumpforce;
 public float speed = 5f;
@@ -134,13 +135,33 @@ transform.Rotate(0,moveH,0,Space.World);
 		string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
 		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad);
 
-	}else if(/*int.Parse(timeText.text)<=0 *//*Time.timeScale<=0*/!isPause){
+	}else if(!isPause){
 		MainAudio.Stop();
 		audio.clip = clips[3];
 		audio.Play();
-		Pause(lose);
+		//Pause(sale, "sale");
+		//Pause(lose, "loose");
 		pauseBtn.gameObject.SetActive(false);
+
+		audio.loop=!isPause;
+		timeText.transform.parent.gameObject.SetActive(isPause);
+		txt.transform.parent.gameObject.SetActive(isPause);
+		//volumeBtn.gameObject.SetActive(!isPause);
+		//windowTxt.gameObject.SetActive(!isPause);
+		sale.SetActive(!isPause);
+		Time.timeScale=isPause?1:0;
+		joystick.gameObject.SetActive(isPause);
+		jmpBtn.gameObject.SetActive(isPause);
+		isPause=!isPause;
 }
+/*else if(!isPause){
+		MainAudio.Stop();
+		audio.clip = clips[3];
+		audio.Play();
+		Pause(sale, "sale");
+		//Pause(lose, "loose");
+		pauseBtn.gameObject.SetActive(false);
+}*/
 //	timeText.text = Mathf.Ceil((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString();
 
 	//rb.velocity= new Vector3 (moveH * speed,rb.velocity.y,moveV * speed);
@@ -194,7 +215,7 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 				audio.clip = clips[2];
 				audio.Play();
 				MainAudio.Stop();
-				Pause(win);
+				Pause(win, "win");
 				pauseBtn.gameObject.SetActive(false);
 				if(lvl>=2){
 				PlayerPrefs.SetInt("lvl",1);
@@ -215,7 +236,7 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 		}
 	}
 
-public void Pause(GameObject show){
+public void Pause(GameObject show, string desctiption){
 audio.loop=!isPause;
 timeText.transform.parent.gameObject.SetActive(isPause);
 txt.transform.parent.gameObject.SetActive(isPause);
@@ -226,6 +247,11 @@ Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);
 isPause=!isPause;
+	/*
+	if(description.Contains("loose")){
+		
+	}
+	*/
 }
 
 public void PauseClick(GameObject show){

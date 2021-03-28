@@ -56,8 +56,8 @@ TimerAudio=GetComponents<AudioSource>()[2];
 
 
 
-PlayerPrefs.SetInt("lvl",lvl);
-Time.timeScale=1;
+//PlayerPrefs.SetInt("lvl",lvl);
+//Time.timeScale=1;
 /*if(lvl != null)
 PlayerPrefs.SetInt("lvl",lvl);
 else*/
@@ -71,10 +71,15 @@ print(lvl);
 
 
 
-if (flag != ""){
+/*if (flag != ""){
 	PlayerPrefs.SetString("name",flag);
 	}
+PlayerPrefs.SetString("name",dogs[lvl-1].name);*/
+
 PlayerPrefs.SetString("name",dogs[lvl-1].name);
+if(!PlayerPrefs.HasKey("name")){
+PlayerPrefs.SetString("name",dogs[lvl-1].name);
+}
 	//anim = GetComponent<Animator>();
 	rb = GetComponent<Rigidbody>();
 	foreach(GameObject dog in dogs){
@@ -88,6 +93,7 @@ PlayerPrefs.SetString("name",dogs[lvl-1].name);
 	}
 	
 }*/
+print(PlayerPrefs.GetString("name"));
 anim=GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
 	txt.text = Convert.ToString (count +"/"+maxCount);
 	string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
@@ -136,9 +142,13 @@ transform.Rotate(0,moveH,0,Space.World);
 		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad);
 
 	}else if(!isPause){
+		PlayerPrefs.SetString("name",dogs[lvl-1].name);
 		MainAudio.Stop();
-		audio.clip = clips[3];
-		audio.Play();
+		/*if(!TimerAudio.isPlaying) 
+			TimerAudio.Play();
+		*/
+		/*audio.clip = clips[3];
+		audio.Play();*/
 		//Pause(sale, "sale");
 		//Pause(lose, "loose");
 		pauseBtn.gameObject.SetActive(false);
@@ -149,7 +159,7 @@ transform.Rotate(0,moveH,0,Space.World);
 		//volumeBtn.gameObject.SetActive(!isPause);
 		//windowTxt.gameObject.SetActive(!isPause);
 		sale.SetActive(!isPause);
-		Time.timeScale=isPause?1:0;
+		//Time.timeScale=isPause?1:0;
 		joystick.gameObject.SetActive(isPause);
 		jmpBtn.gameObject.SetActive(isPause);
 		isPause=!isPause;
@@ -224,6 +234,7 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 				PlayerPrefs.SetInt("lvl",++lvl);
 				print(lvl);
 				}
+				PlayerPrefs.SetString("name",dogs[lvl-1].name);
 			}
 			Destroy(other.gameObject, 0.2f);
 		}
@@ -243,7 +254,7 @@ txt.transform.parent.gameObject.SetActive(isPause);
 //volumeBtn.gameObject.SetActive(!isPause);
 windowTxt.gameObject.SetActive(!isPause);
 show.SetActive(!isPause);
-Time.timeScale=isPause?1:0;
+//Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);
 isPause=!isPause;
@@ -258,17 +269,23 @@ public void PauseClick(GameObject show){
 volumeBtn.gameObject.SetActive(!isPause);
 windowTxt.gameObject.SetActive(!isPause);
 show.SetActive(!isPause);
-Time.timeScale=isPause?1:0;
+//Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);
 isPause=!isPause;
 }
-
+public void loseMusic(){
+audio.clip = clips[3];
+audio.Play();
+}
 public void SpaceJump(){
 if ( !yetJump){
 	Jumping();
  	rb.AddForce(Vector3.up * jumpforce, ForceMode.Impulse);
 	}
 }
+
+
 	
 }
+

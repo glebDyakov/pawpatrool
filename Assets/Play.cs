@@ -6,7 +6,13 @@ using UnityEngine.UI;
 using System;
 public class Play : MonoBehaviour
 {
-
+	public static string chooseSale;
+	public Text timeText;
+	public GameObject video;
+	public GameObject pause;
+	public GameObject loseWindow;
+	public GameObject loseScaleWindow;
+	public GameObject readyWindow;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,5 +47,44 @@ public void Home(){
 	} 
     }*/
   
+	public void ShowWindow(string sale){
+		//timeText.text = "0";
+		chooseSale=sale;
+		loseScaleWindow.SetActive(false);
+		readyWindow.SetActive(true);
+	}
+
+	public void ShowLoseWindow(){
+		
+readyWindow.SetActive(false);
+//loseWindow.SetActive(true);
+video.SetActive(true);
+ReclaimReward();
+	} 
+public void ReclaimReward()
+    {//Play play=player.GetComponent<Play>();
+	
+	video.SetActive(false);
+	 Player/*GameObject*/ playerScript=gameObject.GetComponent<Player>();
+	playerScript.isPause=!playerScript.isPause;
+	/*
+        coints++;
+        cointsText.text = "Coints: " + coints;
+    	*/if(Play.chooseSale=="lose"){
+	print("lose");
+	playerScript.loseMusic();
+	loseWindow.SetActive(true);
+}else if(Play.chooseSale=="win"){
+print("win");
+playerScript.Pause(pause,"pause");
+playerScript.time=180f;
+print(playerScript.isPause);
+
+	print("смотрим рекламу");
+        //coints = Convert.ToString(playerScript.time);
+        //cointsText.text = coints.ToString();
+	timeText.text=Convert.ToString(playerScript.time);
+}    	
+    }
 
 }

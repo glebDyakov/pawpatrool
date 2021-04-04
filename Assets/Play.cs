@@ -6,13 +6,21 @@ using UnityEngine.UI;
 using System;
 public class Play : MonoBehaviour
 {
+	public GameObject joystick;
+	public GameObject jumpButton;
+	public GameObject pauseButton;
+	public GameObject timeButton;
+	public GameObject coinButton;
+//
 	public static string chooseSale;
 	public Text timeText;
+	public Text saleText;
 	public GameObject video;
 	public GameObject pause;
 	public GameObject loseWindow;
 	public GameObject loseScaleWindow;
 	public GameObject readyWindow;
+	
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +60,7 @@ public void Home(){
 		chooseSale=sale;
 		loseScaleWindow.SetActive(false);
 		readyWindow.SetActive(true);
+		saleText.text="10";
 	}
 
 	public void ShowLoseWindow(){
@@ -76,8 +85,20 @@ public void ReclaimReward()
 	loseWindow.SetActive(true);
 }else if(Play.chooseSale=="win"){
 print("win");
-playerScript.Pause(pause,"pause");
-playerScript.time=180f;
+//playerScript.Pause(pause,"pause");
+	joystick.SetActive(true);
+	jumpButton.SetActive(true);
+	pauseButton.SetActive(true);
+	timeButton.SetActive(true);
+	coinButton.SetActive(true);
+	playerScript.time += 45f;
+	playerScript.showingReclam = true;
+	playerScript.bonus = true;
+	print("playerScript.showingReclam " + playerScript.showingReclam);
+	//timeText.text = "00:45";
+	//playerScript.time = Time.timeSinceLevelLoad+45f;
+
+//playerScript.time=180f;
 print(playerScript.isPause);
 
 	print("смотрим рекламу");

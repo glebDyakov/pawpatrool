@@ -15,11 +15,17 @@ public class WatchLogic : MonoBehaviour
 	*/
 	
 	void Watch(){
-		if( /*sale && */int.Parse(timeText.text)<=0){
+if (!gameObject.active){
+		timeText.text="10";
+		}
+print(timeText.text);
+ Player playerScript=player.GetComponent<Player>();
+		if( /*sale && */int.Parse(timeText.text)<=0 && playerScript.isPause){
 			CancelInvoke("Watch");
 		Play playScript=player.GetComponent<Play>();//.ShowWindow("lose")
 		playScript.ShowWindow("lose");
-		}else{
+		
+		}else if (playerScript.isPause){
 			timeText.text = (int.Parse(timeText.text) - 1).ToString();
 		}
 	}
@@ -52,7 +58,8 @@ public class WatchLogic : MonoBehaviour
     {
 	//StartCoroutine(WatchTime());        
 	//StartCoroutine(WatchTick());    
-	InvokeRepeating("Watch", 1f, 1f);    
+	InvokeRepeating("Watch", 1f, 1f);  
+	  
     }
 
     void Update()

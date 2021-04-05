@@ -12,7 +12,7 @@ public class Play : MonoBehaviour
 	public GameObject timeButton;
 	public GameObject coinButton;
 //
-	public static string chooseSale;
+	public static string chooseSale="";
 	public Text timeText;
 	public Text saleText;
 	public GameObject video;
@@ -20,6 +20,7 @@ public class Play : MonoBehaviour
 	public GameObject loseWindow;
 	public GameObject loseScaleWindow;
 	public GameObject readyWindow;
+	public AudioSource TimerAudio;
 	
     // Start is called before the first frame update
     void Start()
@@ -56,11 +57,14 @@ public void Home(){
     }*/
   
 	public void ShowWindow(string sale){
+		TimerAudio=gameObject.GetComponents<AudioSource>()[2];
+		TimerAudio.Stop();
 		//timeText.text = "0";
 		chooseSale=sale;
 		loseScaleWindow.SetActive(false);
 		readyWindow.SetActive(true);
 		saleText.text="10";
+		Time.timeScale=0;
 	}
 
 	public void ShowLoseWindow(){
@@ -91,7 +95,7 @@ print("win");
 	pauseButton.SetActive(true);
 	timeButton.SetActive(true);
 	coinButton.SetActive(true);
-	playerScript.time += 45f;
+	playerScript.time += 50f;
 	playerScript.showingReclam = true;
 	playerScript.bonus = true;
 	print("playerScript.showingReclam " + playerScript.showingReclam);
@@ -105,6 +109,8 @@ print(playerScript.isPause);
         //coints = Convert.ToString(playerScript.time);
         //cointsText.text = coints.ToString();
 	timeText.text=Convert.ToString(playerScript.time);
+	chooseSale="";
+	Time.timeScale=1;
 }    	
     }
 

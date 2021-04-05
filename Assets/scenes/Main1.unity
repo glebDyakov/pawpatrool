@@ -19901,6 +19901,7 @@ MonoBehaviour:
   txt: {fileID: 799162467}
   windowTxt: {fileID: 483002539}
   maxCount: 3
+  count: 0
   yetJump: 0
   flag: rocky
   clips:

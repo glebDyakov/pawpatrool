@@ -24,6 +24,7 @@ print(timeText.text);
 			CancelInvoke("Watch");
 		Play playScript=player.GetComponent<Play>();//.ShowWindow("lose")
 		playScript.ShowWindow("lose");
+		//Time.timeScale=0;
 		
 		}else if (playerScript.isPause){
 			timeText.text = (int.Parse(timeText.text) - 1).ToString();

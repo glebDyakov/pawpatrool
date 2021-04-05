@@ -9,7 +9,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
-
+string resetText="";
 public bool bonus = false;
 public float bonusTime = 60;
 public bool showingReclam = false;
@@ -37,7 +37,8 @@ public Text txt;
 public Text windowTxt;
  int lvl=1;
 public int maxCount=3;
-int count=0;
+public int maxLvl=7;
+public int count=0;
 public bool yetJump = false;
 Rigidbody rb;
 public string flag="";
@@ -47,6 +48,7 @@ public List<AudioClip> clips;
 AudioSource audio;
 AudioSource TimerAudio;
 AudioSource MainAudio;
+
 
     // Start is called before the first frame update
 void Awake(){
@@ -61,7 +63,7 @@ TimerAudio=GetComponents<AudioSource>()[2];
 
 
 //PlayerPrefs.SetInt("lvl",lvl);
-//Time.timeScale=1;
+Time.timeScale=1;
 /*if(lvl != null)
 PlayerPrefs.SetInt("lvl",lvl);
 else*/
@@ -70,7 +72,7 @@ if(PlayerPrefs.HasKey("lvl"))
 else
 PlayerPrefs.SetInt("lvl",lvl);
 maxCount=lvl*5;
-maxCount=1;
+//maxCount=1;
 print(lvl);
 
 
@@ -80,7 +82,7 @@ print(lvl);
 	}
 PlayerPrefs.SetString("name",dogs[lvl-1].name);*/
 
-PlayerPrefs.SetString("name",dogs[lvl-1].name);
+//PlayerPrefs.SetString("name",dogs[lvl-1].name);
 if(!PlayerPrefs.HasKey("name")){
 PlayerPrefs.SetString("name",dogs[lvl-1].name);
 }
@@ -115,9 +117,12 @@ moveVelocity=moveInput.normalized * speed;
 rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
 */
 //rb.velocity=new Vector3(rb.velocity.x,rb.velocity.y,moveV * speed);
+if(!isPause){
 transform.Translate (Vector3.forward * moveV * speed * Time.deltaTime);
+}
 if(!yetJump && moveV!=0){
-//DANGER audio.loop=isPause;
+
+audio.loop=isPause;
 anim.Play("run");
 }
 /*else if(rb.velocity==Vector3.zero){
@@ -127,7 +132,7 @@ anim.Play("idle");
 /*rot=new Vector3(0,moveH * 100,0);
 Quaternion deltaRotation = Quaternion.Euler(rot * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation );*/
-if(!yetJump){
+if(!yetJump && !isPause){
 transform.Rotate(0,moveH,0,Space.World);
 }
 }
@@ -136,35 +141,28 @@ transform.Rotate(0,moveH,0,Space.World);
     {
 
 	if(!MainAudio.isPlaying && !isPause){
-MainAudio.Play();
-}
+		MainAudio.Play();
+	} else if(count >= maxCount && isPause && audio.clip==clips[1]){
+		audio.clip = clips[2];		
+		audio.Play();		
+	}
 
 	if(Mathf.Ceil(Time.timeSinceLevelLoad) <= time && !isPause){
 		if(Mathf.Ceil(Time.timeSinceLevelLoad) >= time - 10f){
 			timeText.color = new Color32(255, 0, 0, 255);
-			if(!TimerAudio.isPlaying && !isPause) 
+			if(!TimerAudio.isPlaying && !isPause) {
 			TimerAudio.Play();
+			}
 		}
 		string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
 		
 		//int minusFromReclam = showingReclam ? 15 : 0;
 		bonusTime = bonus ? 45f : 60f;
 		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad);
-		/*
-		print(timeText.text.Split(':')[0] + ":" + (int.Parse(timeText.text.Split(':')[1]) - 15).ToString());
-		if(showingReclam){
-			if(int.Parse(timeText.text.Split(':')[1]) <= 0){
-				timeText.text = "0:45";
-				//showingReclam = false;
-			} else if(int.Parse(timeText.text.Split(':')[1]) > 0){
-				string zeroOfReclamText = (int.Parse(timeText.text.Split(':')[1]) - 15).ToString().Length == 1 ? "0" : "";
-				timeText.text = timeText.text.Split(':')[0] + ":" + zeroOfReclamText + (int.Parse(timeText.text.Split(':')[1]) - 15).ToString();
-				//showingReclam = false;
-			}
-		}
-		*/
+		
 
 	}else if(!isPause){
+		
 		bonus = false;
 		timeText.color = new Color32(255, 255, 255, 255);
 
@@ -179,7 +177,7 @@ MainAudio.Play();
 		//Pause(lose, "loose");
 		pauseBtn.gameObject.SetActive(false);
 
-		//DANGER audio.loop=!isPause;
+		audio.loop=!isPause;
 		timeText.transform.parent.gameObject.SetActive(isPause);
 		txt.transform.parent.gameObject.SetActive(isPause);
 		//volumeBtn.gameObject.SetActive(!isPause);
@@ -190,6 +188,9 @@ MainAudio.Play();
 		jmpBtn.gameObject.SetActive(isPause);
 		isPause=!isPause;
 }
+ if(!TimerAudio.isPlaying && isPause && Mathf.Ceil(Time.timeSinceLevelLoad) >= time && Play.chooseSale==""){
+			TimerAudio.Play();
+			}
 /*else if(!isPause){
 		MainAudio.Stop();
 		audio.clip = clips[3];
@@ -254,7 +255,7 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 				
 				Pause(win, "win");
 				pauseBtn.gameObject.SetActive(false);
-				if(lvl>=2){
+				if(lvl>=maxLvl){
 				PlayerPrefs.SetInt("lvl",1);
 				}
 				else{
@@ -271,17 +272,19 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 			
 			yetJump = false;
 			anim.Play("idle");
+			
 		}
 	}
 
 public void Pause(GameObject show, string desctiption){
-//DANGER audio.loop=!isPause;
+//Play.chooseSale="";
+audio.loop=!isPause;
 timeText.transform.parent.gameObject.SetActive(isPause);
 txt.transform.parent.gameObject.SetActive(isPause);
 //volumeBtn.gameObject.SetActive(!isPause);
 windowTxt.gameObject.SetActive(!isPause);
 show.SetActive(!isPause);
-//Time.timeScale=isPause?1:0;
+Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);
 isPause=!isPause;
@@ -293,10 +296,11 @@ isPause=!isPause;
 }
 
 public void PauseClick(GameObject show){
+//Play.chooseSale="";
 volumeBtn.gameObject.SetActive(!isPause);
 windowTxt.gameObject.SetActive(!isPause);
 show.SetActive(!isPause);
-//Time.timeScale=isPause?1:0;
+Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);
 jmpBtn.gameObject.SetActive(isPause);
 isPause=!isPause;

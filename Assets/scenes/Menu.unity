@@ -4731,11 +4731,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06887457ff7f02a4aa47bd429d20357d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  joystick: {fileID: 0}
+  jumpButton: {fileID: 0}
+  pauseButton: {fileID: 0}
+  timeButton: {fileID: 0}
+  coinButton: {fileID: 0}
   timeText: {fileID: 0}
+  saleText: {fileID: 0}
   video: {fileID: 0}
+  pause: {fileID: 0}
   loseWindow: {fileID: 0}
   loseScaleWindow: {fileID: 0}
   readyWindow: {fileID: 0}
+  TimerAudio: {fileID: 0}
 --- !u!114 &1839847153
 MonoBehaviour:
   m_ObjectHideFlags: 0

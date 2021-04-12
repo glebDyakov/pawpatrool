@@ -15,11 +15,17 @@ public class SelectCharacter : MonoBehaviour
 	int lvl;
     // Start is called before the first frame update
     void Start()
-    {	lvl=PlayerPrefs.GetInt("lvl");
+    {
+	if(PlayerPrefs.HasKey("lvl")){
+		lvl=PlayerPrefs.GetInt("lvl");
+	}else{
+		lvl=1;
+	}
         if(lvl>=int.Parse(Convert.ToString(gameObject.tag[0]))){
 		transform.GetChild(0).gameObject.SetActive(false);
 		lockChoose=false;
 	}
+
     }
 
 	void OnTriggerExit2D(Collider2D other){

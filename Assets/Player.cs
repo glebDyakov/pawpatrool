@@ -9,6 +9,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
+public float timeStamp;
 string resetText="";
 public bool bonus = false;
 public float bonusTime = 60;
@@ -60,8 +61,6 @@ TimerAudio=GetComponents<AudioSource>()[2];
     void Start()
     {
 
-
-
 //PlayerPrefs.SetInt("lvl",lvl);
 Time.timeScale=1;
 /*if(lvl != null)
@@ -89,18 +88,19 @@ PlayerPrefs.SetString("name",dogs[lvl-1].name);
 	//anim = GetComponent<Animator>();
 	rb = GetComponent<Rigidbody>();
 	foreach(GameObject dog in dogs){
-	if(dog.gameObject.name == PlayerPrefs.GetString("name")){
-		Instantiate(dog,transform)/* as GameObject*/ ;
+		if(dog.gameObject.name.Contains(PlayerPrefs.GetString("name"))){
+			Instantiate(dog,transform)/* as GameObject*/ ;
 		}
 	}
         /*foreach(GameObject dog in dogs){
-	if(dog.gameObject.name == PlayerPrefs.GetString("name")){
-	anim = dog.gameObject.GetComponent<Animator>();
-	}
-	
-}*/
+		if(dog.gameObject.name == PlayerPrefs.GetString("name")){
+			anim = dog.gameObject.GetComponent<Animator>();
+		}
+	}*/
 print(PlayerPrefs.GetString("name"));
+
 anim=GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+
 	txt.text = Convert.ToString (count +"/"+maxCount);
 	string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
 	startTime= Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad);
@@ -243,28 +243,30 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Bone"){
-			
-			count++;
-			audio.clip = clips[1];
-			audio.Play();
-       			txt.text = Convert.ToString (count +"/"+maxCount);
-			if(count==maxCount){
-				MainAudio.Stop();
-				audio.clip = clips[2];
+			if(timeStamp + 3f < Time.timeSinceLevelLoad){
+				count++;
+				audio.clip = clips[1];
 				audio.Play();
-				
-				Pause(win, "win");
-				pauseBtn.gameObject.SetActive(false);
-				if(lvl>=maxLvl){
-				PlayerPrefs.SetInt("lvl",1);
+	       			txt.text = Convert.ToString (count +"/"+maxCount);
+				if(count==maxCount){
+					MainAudio.Stop();
+					audio.clip = clips[2];
+					audio.Play();
+					
+					Pause(win, "win");
+					pauseBtn.gameObject.SetActive(false);
+					if(lvl>=maxLvl){
+						PlayerPrefs.SetInt("lvl",1);
+					}
+					else{
+						PlayerPrefs.SetInt("lvl",++lvl);
+						print(lvl);
+					}
+					PlayerPrefs.SetString("name",dogs[lvl-1].name);
 				}
-				else{
-				PlayerPrefs.SetInt("lvl",++lvl);
-				print(lvl);
-				}
-				PlayerPrefs.SetString("name",dogs[lvl-1].name);
+				Destroy(other.gameObject, 0.2f);
+				timeStamp = Time.timeSinceLevelLoad;
 			}
-			Destroy(other.gameObject, 0.2f);
 		}
 	}
 	void OnCollisionEnter(Collision other){

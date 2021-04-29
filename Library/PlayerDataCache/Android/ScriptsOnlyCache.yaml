@@ -37,8 +37,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.RectMask2D
     - UnityEngine.UI.ScrollRect
     - UnityEngine.UI.Text
-    com.unity.multiplayer-hlapi.Runtime.dll:
-    - UnityEngine.Networking.NetworkCallbacks
   sceneClasses:
     Assets/scenes/Main1.unity:
     - Class: 1
@@ -110,9 +108,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -136,6 +134,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main2.unity:
     - Class: 1
@@ -207,9 +209,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -233,6 +235,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main3.unity:
     - Class: 1
@@ -304,9 +310,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -330,6 +336,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main4.unity:
     - Class: 1
@@ -401,9 +411,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -427,6 +437,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main5.unity:
     - Class: 1
@@ -498,9 +512,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -524,6 +538,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main6.unity:
     - Class: 1
@@ -595,9 +613,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -621,6 +639,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/Main7.unity:
     - Class: 1
@@ -692,9 +714,9 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13988}
     - Class: 114
-      Script: {instanceID: 25616}
+      Script: {instanceID: 26460}
     - Class: 114
-      Script: {instanceID: 25622}
+      Script: {instanceID: 26466}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -718,6 +740,10 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 328
+      Script: {instanceID: 0}
+    - Class: 329
       Script: {instanceID: 0}
     Assets/scenes/MainScreen.unity:
     - Class: 1
@@ -906,7 +932,7 @@ ScriptsOnlyBuild:
     className: GroupTrack
   - hash:
       serializedVersion: 2
-      Hash: fefdd82573e3ecfc3cb6507f37c0c1d6
+      Hash: f49705f12b026efbc55e5eab329afd11
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: WatchLogic
@@ -1374,7 +1400,7 @@ ScriptsOnlyBuild:
     className: MarkerTrack
   - hash:
       serializedVersion: 2
-      Hash: 65bf6cda2c2a90a3a4cb650638b49d30
+      Hash: ff49dcbd7ed02e235247d551313aebb6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
@@ -1533,4 +1559,4 @@ ScriptsOnlyBuild:
   - Assets/scenes/Main5.unity
   - Assets/scenes/Main6.unity
   - Assets/scenes/Main7.unity
-  playerPath: C:/PawPatrol/PawPatrol.apk
+  playerPath: C:/PawPatrol/PawPatrolWithVideo.apk

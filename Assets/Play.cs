@@ -64,13 +64,7 @@ public void Home(){
 		SceneManager.LoadScene("Menu");
 	}
 
-    /*void Update()
-    {
-	if(Input.GetMouseButtonDown(0)){
-		SceneManager.LoadScene("Main" + PlayerPrefs.GetInt("lvl"));
-		print("dsa");
-	} 
-    }*/
+   
   
 	public void ShowWindow(string sale){
 		TimerAudio=gameObject.GetComponents<AudioSource>()[2];
@@ -81,53 +75,57 @@ public void Home(){
 		readyWindow.SetActive(true);
 		saleText.text="10";
 		Time.timeScale=0;
+		GetComponent<Player>().timeMultiplier++;
 	}
 
 	public void ShowLoseWindow(){
 		
-readyWindow.SetActive(false);
-//loseWindow.SetActive(true);
-video.SetActive(true);
-ReclaimReward();
+		readyWindow.SetActive(false);
+		//loseWindow.SetActive(true);
+		video.SetActive(true);
+		ReclaimReward();
 	} 
-public void ReclaimReward()
-    {//Play play=player.GetComponent<Play>();
+	public void ReclaimReward()
+	    {//Play play=player.GetComponent<Play>();
 	
-	video.SetActive(false);
-	 Player/*GameObject*/ playerScript=gameObject.GetComponent<Player>();
-	playerScript.isPause=!playerScript.isPause;
-	/*
-        coints++;
-        cointsText.text = "Coints: " + coints;
-    	*/if(Play.chooseSale=="lose"){
-	print("lose");
-	playerScript.loseMusic();
-	loseWindow.SetActive(true);
-}else if(Play.chooseSale=="win"){
-print("win");
-//playerScript.Pause(pause,"pause");
-	joystick.SetActive(true);
-	jumpButton.SetActive(true);
-	pauseButton.SetActive(true);
-	timeButton.SetActive(true);
-	coinButton.SetActive(true);
-	playerScript.time += 50f;
-	playerScript.showingReclam = true;
-	playerScript.bonus = true;
-	print("playerScript.showingReclam " + playerScript.showingReclam);
-	//timeText.text = "00:45";
-	//playerScript.time = Time.timeSinceLevelLoad+45f;
+		video.SetActive(false);
+		 Player/*GameObject*/ playerScript=gameObject.GetComponent<Player>();
+		playerScript.isPause=!playerScript.isPause;
+		print("chooseSale " + Play.chooseSale.ToString());
+		print("im called from video");
+		if(Play.chooseSale=="lose"){
+		print("lose");
+		playerScript.loseMusic();
+		loseWindow.SetActive(true);
+		playerScript.windowTxt.gameObject.SetActive(!playerScript.isPause);
+		playerScript.windowTxt.text = Convert.ToString (playerScript.count +"/"+playerScript.maxCount);
+	}else if(Play.chooseSale=="win"){
+		print("win");
+		//playerScript.Pause(pause,"pause");
+		joystick.SetActive(true);
+		jumpButton.SetActive(true);
+		pauseButton.SetActive(true);
+		timeButton.SetActive(true);
+		coinButton.SetActive(true);
+		playerScript.time += 50f;
+		//playerScript.time = 45f;
+		playerScript.showingReclam = true;
+		playerScript.bonus = true;
+		print("playerScript.showingReclam " + playerScript.showingReclam);
+		//timeText.text = "00:45";
+		//playerScript.time = Time.timeSinceLevelLoad+45f;
+	
+		//playerScript.time=180f;
+		print(playerScript.isPause);
 
-//playerScript.time=180f;
-print(playerScript.isPause);
-
-	print("смотрим рекламу");
-        //coints = Convert.ToString(playerScript.time);
-        //cointsText.text = coints.ToString();
-	timeText.text=Convert.ToString(playerScript.time);
-	chooseSale="";
-	Time.timeScale=1;
-}    	
+		print("смотрим рекламу");
+	        //coints = Convert.ToString(playerScript.time);
+	        //cointsText.text = coints.ToString();
+		timeText.text=Convert.ToString(playerScript.time);
+		chooseSale="";
+		Time.timeScale=1;
+	
+	}    	
     }
 
 }

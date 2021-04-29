@@ -9,6 +9,8 @@ using System;
 
 public class Player : MonoBehaviour
 {
+public int fixBug;
+public int timeMultiplier = 0;
 public float timeStamp;
 string resetText="";
 public bool bonus = false;
@@ -23,7 +25,7 @@ float moveH;
 public bool isPause=false;
 Vector3 moveInput;
 Vector3 moveVelocity;
-public float time=180f;
+public float time=300f;
 Vector3 rot;
 public GameObject win;
 public GameObject lose;
@@ -49,7 +51,7 @@ public List<AudioClip> clips;
 AudioSource audio;
 AudioSource TimerAudio;
 AudioSource MainAudio;
-
+float Oldtxt;
 
     // Start is called before the first frame update
 void Awake(){
@@ -70,7 +72,7 @@ if(PlayerPrefs.HasKey("lvl"))
  lvl=PlayerPrefs.GetInt("lvl");
 else
 PlayerPrefs.SetInt("lvl",lvl);
-maxCount=lvl*5;
+maxCount=lvl*50;
 //maxCount=1;
 print(lvl);
 
@@ -111,27 +113,15 @@ void FixedUpdate()
     {
 moveV=joystick.Vertical;
 moveH=joystick.Horizontal;
-
-/*moveInput=new Vector3(rb.velocity.x,rb.velocity.y,moveV);
-moveVelocity=moveInput.normalized * speed;
-rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
-*/
-//rb.velocity=new Vector3(rb.velocity.x,rb.velocity.y,moveV * speed);
 if(!isPause){
 transform.Translate (Vector3.forward * moveV * speed * Time.deltaTime);
 }
 if(!yetJump && moveV!=0){
-
+Play.chooseSale="";
 audio.loop=isPause;
 anim.Play("run");
 }
-/*else if(rb.velocity==Vector3.zero){
-anim.Play("idle");
-}*/
 
-/*rot=new Vector3(0,moveH * 100,0);
-Quaternion deltaRotation = Quaternion.Euler(rot * Time.deltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation );*/
 if(!yetJump && !isPause){
 transform.Rotate(0,moveH,0,Space.World);
 }
@@ -147,18 +137,25 @@ transform.Rotate(0,moveH,0,Space.World);
 		audio.Play();		
 	}
 
-	if(Mathf.Ceil(Time.timeSinceLevelLoad) <= time && !isPause){
-		if(Mathf.Ceil(Time.timeSinceLevelLoad) >= time - 10f){
+	if(!isPause && ((bonusTime == 60 && Mathf.Ceil(Time.timeSinceLevelLoad) <= time) || (bonusTime == 45 && Mathf.Ceil(Time.timeSinceLevelLoad) <= time - (5 * timeMultiplier)))){
+		if(Mathf.Ceil(Time.timeSinceLevelLoad) >= time - 10f && !bonus){
+			timeText.color = new Color32(255, 0, 0, 255);
+			if(!TimerAudio.isPlaying && !isPause) {
+			TimerAudio.Play();
+			}
+		} else if(Mathf.Ceil(Time.timeSinceLevelLoad) >= time - (10f + (5f * timeMultiplier)) && bonus){
 			timeText.color = new Color32(255, 0, 0, 255);
 			if(!TimerAudio.isPlaying && !isPause) {
 			TimerAudio.Play();
 			}
 		}
-		string zero = Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad).ToString().Length == 1 ? "0" : "";
+		fixBug = bonus && Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad) >= 15 ? -15 : bonus && Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad) < 15 ? 30 : 0;
+		string zero = (Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad) + fixBug).ToString().Length == 1 ? "0" : "";
 		
 		//int minusFromReclam = showingReclam ? 15 : 0;
 		bonusTime = bonus ? 45f : 60f;
-		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad);
+		
+		timeText.text = Mathf.Floor((time - Time.timeSinceLevelLoad) / 60f).ToString() + ":" + zero  + (Mathf.Floor((Mathf.Ceil(Time.timeSinceLevelLoad / bonusTime) * bonusTime) - Time.timeSinceLevelLoad) + fixBug);
 		
 
 	}else if(!isPause){
@@ -176,29 +173,29 @@ transform.Rotate(0,moveH,0,Space.World);
 		//Pause(sale, "sale");
 		//Pause(lose, "loose");
 		pauseBtn.gameObject.SetActive(false);
-
-		audio.loop=!isPause;
+		/*windowTxt.gameObject.SetActive(!isPause);
+		windowTxt.text = Convert.ToString (count +"/"+maxCount);*/
+		audio.loop=isPause;
 		timeText.transform.parent.gameObject.SetActive(isPause);
 		txt.transform.parent.gameObject.SetActive(isPause);
 		//volumeBtn.gameObject.SetActive(!isPause);
 		//windowTxt.gameObject.SetActive(!isPause);
-		sale.SetActive(!isPause);
+		Oldtxt=time;
+		if(Play.chooseSale==""){
+			sale.SetActive(!isPause);
+		}else{
+		//sale.SetActive(false);
+		}
+		Time.timeScale = 0;
 		//Time.timeScale=isPause?1:0;
 		joystick.gameObject.SetActive(isPause);
 		jmpBtn.gameObject.SetActive(isPause);
 		isPause=!isPause;
 }
- if(!TimerAudio.isPlaying && isPause && Mathf.Ceil(Time.timeSinceLevelLoad) >= time && Play.chooseSale==""){
+/* if(!TimerAudio.isPlaying && isPause && Mathf.Ceil(Time.timeSinceLevelLoad) >= time && Play.chooseSale==""){
 			TimerAudio.Play();
 			}
-/*else if(!isPause){
-		MainAudio.Stop();
-		audio.clip = clips[3];
-		audio.Play();
-		Pause(sale, "sale");
-		//Pause(lose, "loose");
-		pauseBtn.gameObject.SetActive(false);
-}*/
+*/
 //	timeText.text = Mathf.Ceil((Mathf.Ceil(Time.timeSinceLevelLoad / 60f) * 60f) - Time.timeSinceLevelLoad).ToString();
 
 	//rb.velocity= new Vector3 (moveH * speed,rb.velocity.y,moveV * speed);
@@ -238,17 +235,20 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 		audio.Play();
 		anim.Play("jump");
 		yetJump = true;
+		
 	}
 
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.tag == "Bone"){
-			if(timeStamp + 3f < Time.timeSinceLevelLoad){
+			Destroy(other.gameObject/*, 0.2f*/);
+			//DANGER if(timeStamp + 3f < Time.timeSinceLevelLoad){
 				count++;
 				audio.clip = clips[1];
 				audio.Play();
 	       			txt.text = Convert.ToString (count +"/"+maxCount);
 				if(count==maxCount){
+					windowTxt.text = Convert.ToString (count +"/"+maxCount);
 					MainAudio.Stop();
 					audio.clip = clips[2];
 					audio.Play();
@@ -263,8 +263,8 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 						print(lvl);
 					}
 					PlayerPrefs.SetString("name",dogs[lvl-1].name);
-				}
-				Destroy(other.gameObject, 0.2f);
+			//DANGER	}
+				//Destroy(other.gameObject/*DANGER , 0.2f*/);
 				timeStamp = Time.timeSinceLevelLoad;
 			}
 		}
@@ -280,7 +280,7 @@ Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity2 * Time.deltaTi
 
 public void Pause(GameObject show, string desctiption){
 //Play.chooseSale="";
-audio.loop=!isPause;
+audio.loop=isPause;
 timeText.transform.parent.gameObject.SetActive(isPause);
 txt.transform.parent.gameObject.SetActive(isPause);
 //volumeBtn.gameObject.SetActive(!isPause);
@@ -300,7 +300,10 @@ isPause=!isPause;
 public void PauseClick(GameObject show){
 //Play.chooseSale="";
 volumeBtn.gameObject.SetActive(!isPause);
-windowTxt.gameObject.SetActive(!isPause);
+
+//закомментировал строку ниже чтобы текст "count bones" не накладывался поверх кнопки при паузе
+//windowTxt.gameObject.SetActive(!isPause);
+
 show.SetActive(!isPause);
 Time.timeScale=isPause?1:0;
 joystick.gameObject.SetActive(isPause);

@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class WatchLogic : MonoBehaviour
 {
 	bool sale=true;
 	public Text timeText;
-	public int second = 0;	
+	public static float saleTimeStamp;
+	public int second = 0;
+	public VideoPlayer videoPlayer;
 	public GameObject player;
 	/*
 	public int currentSecond = 0;
@@ -22,10 +25,11 @@ print(timeText.text);
  Player playerScript=player.GetComponent<Player>();
 		if( /*sale && */int.Parse(timeText.text)<=0 && playerScript.isPause){
 			CancelInvoke("Watch");
-		Play playScript=player.GetComponent<Play>();//.ShowWindow("lose")
-		playScript.ShowWindow("lose");
-		//Time.timeScale=0;
-		
+			Play playScript=player.GetComponent<Play>();//.ShowWindow("lose")
+			playScript.ShowWindow("lose");
+			//Time.timeScale=0;
+			//saleTimeStamp = Time.timeSinceLevelLoad;
+			print("saleTimeStamp: " + saleTimeStamp.ToString());
 		}else if (playerScript.isPause){
 			timeText.text = (int.Parse(timeText.text) - 1).ToString();
 		}
@@ -55,11 +59,24 @@ print(timeText.text);
 	} 
 	*/
 
+	public void LoseWindow (VideoPlayer source){
+		if(!source.isPlaying){
+			Time.timeScale=1;
+			Play playScript = player.GetComponent<Play>();//.ShowWindow("lose")
+			Play.chooseSale = "lose";
+			playScript.ShowWindow("lose");
+			//playScript.ShowLoseWindow();
+			print("end video");		
+			//playScript.ShowWindow("lose");
+		}
+	}
+
     void Start()
     {
-	//StartCoroutine(WatchTime());        
-	//StartCoroutine(WatchTick());    
-	InvokeRepeating("Watch", 1f, 1f);  
+	
+	
+	videoPlayer.loopPointReached += LoseWindow; // loopPointReached is the event for the end of the video  
+	//InvokeRepeating("Watch", 1f, 1f);  
 	  
     }
 

@@ -10,7 +10,7 @@ public class MainScreenLogic : MonoBehaviour
 	/*
 	PlayerPrefs.DeleteAll();
 	PlayerPrefs.Save();
-     	*/
+	*/
 	Invoke("LoadSelectedCharacterScene", 5f);   
     }
 	public void LoadSelectedCharacterScene(){
